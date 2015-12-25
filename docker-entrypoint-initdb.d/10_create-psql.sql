@@ -1,7 +1,7 @@
 create table code (pk int8 not null, code_meaning varchar(255) not null, code_value varchar(255) not null, code_designator varchar(255) not null, code_version varchar(255), primary key (pk));
 create table content_item (pk int8 not null, rel_type varchar(255) not null, text_value varchar(255), code_fk int8, name_fk int8 not null, instance_fk int8, primary key (pk));
 create table dicomattrs (pk int8 not null, attrs bytea not null, primary key (pk));
-create table export_task (pk int8 not null, exporter_id varchar(255) not null, scheduled_time timestamp not null, series_iuid varchar(255) not null, sop_iuid varchar(255) not null, study_iuid varchar(255) not null, version int8, primary key (pk));
+create table export_task (pk int8 not null, device_name varchar(255) not null, exporter_id varchar(255) not null, scheduled_time timestamp not null, series_iuid varchar(255) not null, sop_iuid varchar(255) not null, study_iuid varchar(255) not null, version int8, primary key (pk));
 create table instance (pk int8 not null, availability int4 not null, sr_complete varchar(255) not null, content_date varchar(255) not null, content_time varchar(255) not null, created_time timestamp not null, inst_custom1 varchar(255) not null, inst_custom2 varchar(255) not null, inst_custom3 varchar(255) not null, inst_no varchar(255) not null, retrieve_aets varchar(255), sop_cuid varchar(255) not null, sop_iuid varchar(255) not null, updated_time timestamp not null, sr_verified varchar(255) not null, version int8, dicomattrs_fk int8 not null, srcode_fk int8, reject_code_fk int8, series_fk int8 not null, primary key (pk));
 create table issuer (pk int8 not null, entity_id varchar(255), entity_uid varchar(255), entity_uid_type varchar(255), primary key (pk));
 create table location (pk int8 not null, created_time timestamp not null, digest varchar(255), object_size int8, status int4 not null, storage_id varchar(255) not null, storage_path varchar(255), tsuid varchar(255), instance_fk int8, primary key (pk));
@@ -22,7 +22,7 @@ alter table code add constraint UK_sb4oc9lkns36wswku831c33w6  unique (code_value
 create index UK_i715nk4mi378f9bxflvfroa5a on content_item (rel_type);
 create index UK_6iism30y000w85v649ju968sv on content_item (text_value);
 alter table export_task add constraint UK_aoqbyfnen6evu73ltc1osexfr  unique (exporter_id, study_iuid, series_iuid, sop_iuid);
-create index UK_j1t0mj3vlmf5xwt4fs5xida1r on export_task (scheduled_time);
+create index UK_cxaqwh62doxvy1itpdi43c681 on export_task (device_name, scheduled_time);
 alter table instance add constraint UK_jxfu47kwjk3kkkyrwewjw8a4n  unique (dicomattrs_fk);
 alter table instance add constraint UK_247lgirehl8i2vuanyfjnuyjb  unique (series_fk, sop_iuid);
 create index UK_eg0khesxr81gdimwhjiyrylw7 on instance (sop_iuid);
