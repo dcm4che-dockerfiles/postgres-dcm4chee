@@ -59,12 +59,12 @@ This optional environment variable can be used to define another location - like
     ```console
     $ echo 'host replication replicator 0.0.0.0/0 trust' >> /var/local/mypacs/db/pg_hba.conf
     $ cat << EOF >> /var/local/mypacs/db/postgresql.conf
-    > wal_level = hot_standby
-    > checkpoint_segments = 8
-    > max_wal_senders = 3
-    > wal_keep_segments = 8
-    > hot_standby = on
-    > EOF
+    wal_level = hot_standby
+    checkpoint_segments = 8
+    max_wal_senders = 3
+    wal_keep_segments = 8
+    hot_standby = on
+    EOF
     ```
 3. Restart the container:
 
@@ -74,33 +74,32 @@ This optional environment variable can be used to define another location - like
 4. Create a user for replication:
 
     ```console
-    $ docker exec -it mypostgres bash
-    # psql pacsdb pacs
-    pacsdb=# CREATE USER replicator REPLICATION LOGIN PASSWORD 'replpass';
-    pacsdb=# \q
-    # exit
+    $ docker exec -it mypostgres \
+                  su -c "psql -c "CREATE USER replicator REPLICATION LOGIN PASSWORD 'replpass';\" pacsdb pacs"
     ```
 5. Initialize database files of the 'slave' DB by running `pg_basebackup` against the 'master' DB:
 
     ```console
-    $ docker run -e POSTGRES_DB=pacsdb \
-                 -e POSTGRES_USER=pacs \
-                 -e POSTGRES_PASSWORD=pacs
-                 -v /var/local/mypacs/slave_db:/var/lib/postgresql/data \
+    $ docker run -v /var/local/mypacs/slave_db:/var/lib/postgresql/data \
                  --link mypostgres:db \
                  --rm -it dcm4che/postgres-dcm4chee \
                  su -c "pg_basebackup -h db -D /var/lib/postgresql/data -Ureplicator -P -v -x"
     ```
-6. Create the Recovery Configuration file `recovery.conf`:
+6. Configure parameters needed for log-streaming replication standby in Recovery Configuration file `recovery.conf`:
 
     ```console
     $ cat << EOF > /var/local/mypacs/slave_db/recovery.conf
-    > primary_conninfo = 'host=db port=5432 user=replicator password=replpass'
-    > trigger_file = '/var/lib/postgresql/data/failover'
-    > standby_mode = 'on'
-    > EOF
+    primary_conninfo = 'host=db port=5432 user=replicator password=replpass'
+    trigger_file = '/var/lib/postgresql/data/failover'
+    standby_mode = 'on'
+    EOF
     ```
-7. Start another container with Postgres acting as 'slave' DB connected with the container of the 'master' DB:
+7. Adjust the permissions of the data directory:
+
+    ```console
+    $ chmod 700 /var/local/mypacs/slave_db
+    ```
+8. Start another container with Postgres acting as 'slave' DB connected with the container of the 'master' DB:
 
     ```console
     $ docker run --name mypostgres-slave \
