@@ -44,6 +44,7 @@ This optional environment variable can be used to define another location - like
 ## Setup Master/Slave Replication
 
 1. Start a container with Postgres acting as 'master' DB:
+
     ```console
     $ docker run --name mypostgres \
                  -p 15432:5432 \
@@ -54,6 +55,7 @@ This optional environment variable can be used to define another location - like
                  -d dcm4che/postgres-dcm4chee
     ```
 2. Allow all hosts to replicate with this 'master' DB:
+
     ```console
     $ echo 'host replication replicator 0.0.0.0/0 trust' >> /var/local/mypacs/db/pg_hba.conf
     $ cat << EOF >> /var/local/mypacs/db/postgresql.conf
@@ -65,10 +67,12 @@ This optional environment variable can be used to define another location - like
     > EOF
     ```
 3. Restart the container:
+
     ```console
     $ docker restart mypostgres
     ```
 4. Create a user for replication:
+
     ```console
     $ docker exec -it mypostgres bash
     # psql pacsdb pacs
@@ -77,6 +81,7 @@ This optional environment variable can be used to define another location - like
     # exit
     ```
 5. Initialize database files of the 'slave' DB by running `pg_basebackup` against the 'master' DB:
+
     ```console
     $ docker run -e POSTGRES_DB=pacsdb \
                  -e POSTGRES_USER=pacs \
@@ -87,6 +92,7 @@ This optional environment variable can be used to define another location - like
                  su -c "pg_basebackup -h db -D /var/lib/postgresql/data -Ureplicator -P -v -x"
     ```
 6. Create the Recovery Configuration file `recovery.conf`:
+
     ```console
     $ cat << EOF > /var/local/mypacs/slave_db/recovery.conf
     > primary_conninfo = 'host=db port=5432 user=replicator password=replpass'
@@ -95,6 +101,7 @@ This optional environment variable can be used to define another location - like
     > EOF
     ```
 7. Start another container with Postgres acting as 'slave' DB connected with the container of the 'master' DB:
+
     ```console
     $ docker run --name mypostgres-slave \
                  -p 25432:5432 \
