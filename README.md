@@ -46,7 +46,7 @@ This optional environment variable can be used to define another location - like
 1. Start a container with Postgres acting as 'master' DB:
 
     ```console
-    $ docker run --name mypostgres \
+    $ docker run --name mypostgres-master \
                  -p 15432:5432 \
                  -e POSTGRES_DB=pacsdb \
                  -e POSTGRES_USER=pacs \
@@ -69,19 +69,19 @@ This optional environment variable can be used to define another location - like
 3. Restart the container:
 
     ```console
-    $ docker restart mypostgres
+    $ docker restart mypostgres-master
     ```
 4. Create a user for replication:
 
     ```console
-    $ docker exec -it mypostgres \
+    $ docker exec -it mypostgres-master \
                   su -c "psql -c "CREATE USER replicator REPLICATION LOGIN PASSWORD 'replpass';\" pacsdb pacs"
     ```
 5. Initialize database files of the 'slave' DB by running `pg_basebackup` against the 'master' DB:
 
     ```console
     $ docker run -v /var/local/mypacs/slave_db:/var/lib/postgresql/data \
-                 --link mypostgres:db \
+                 --link mypostgres-master:db \
                  --rm -it dcm4che/postgres-dcm4chee \
                  su -c "pg_basebackup -h db -D /var/lib/postgresql/data -Ureplicator -P -v -x"
     ```
@@ -108,6 +108,6 @@ This optional environment variable can be used to define another location - like
                  -e POSTGRES_USER=pacs \
                  -e POSTGRES_PASSWORD=pacsword \
                  -v /var/local/mypacs/slave_db:/var/lib/postgresql/data \
-                 --link mypostgres:db \
+                 --link mypostgres-master:db \
                  -d dcm4che/postgres-dcm4chee
     ```
