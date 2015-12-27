@@ -75,7 +75,7 @@ This optional environment variable can be used to define another location - like
 
     ```console
     $ docker exec -it mypostgres-master \
-                  su -c "psql -c "CREATE USER replicator REPLICATION LOGIN PASSWORD 'replpass';\" pacsdb pacs"
+                  su -c "psql -c \"CREATE USER replicator REPLICATION LOGIN PASSWORD 'replpass';\" pacsdb pacs"
     ```
 5. Initialize database files of the 'slave' DB by running `pg_basebackup` against the 'master' DB:
 
