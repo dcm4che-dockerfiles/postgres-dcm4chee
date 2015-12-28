@@ -81,7 +81,7 @@ This optional environment variable can be used to define another location - like
 
     ```console
     $ docker run -v /var/local/mypacs/slave_db:/var/lib/postgresql/data \
-                 --link mypostgres-master:db \
+                 --add-host=db:<mypostgres-master-ip> \
                  --rm -it dcm4che/postgres-dcm4chee \
                  su -c "pg_basebackup -h db -D /var/lib/postgresql/data -Ureplicator -P -v -x"
     ```
@@ -99,7 +99,7 @@ This optional environment variable can be used to define another location - like
     ```console
     $ chmod 700 /var/local/mypacs/slave_db
     ```
-8. Start another container with Postgres acting as 'slave' DB connected with the container of the 'master' DB:
+8. Start another container with Postgres acting as 'slave' DB connected with the 'master' DB:
 
     ```console
     $ docker run --name mypostgres-slave \
@@ -108,6 +108,6 @@ This optional environment variable can be used to define another location - like
                  -e POSTGRES_USER=pacs \
                  -e POSTGRES_PASSWORD=pacsword \
                  -v /var/local/mypacs/slave_db:/var/lib/postgresql/data \
-                 --link mypostgres-master:db \
+                 --add-host=db:<mypostgres-master-ip> \
                  -d dcm4che/postgres-dcm4chee
     ```
