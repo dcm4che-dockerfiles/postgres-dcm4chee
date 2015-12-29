@@ -8,7 +8,7 @@ It extends the [official postgres image](https://hub.docker.com/_/postgres/).
 
 ```console
 $ docker run --name mypostgres \
-             -p 15432:5432 \
+             -p 5432:5432 \
              -e POSTGRES_DB=pacsdb \
              -e POSTGRES_USER=pacs \
              -e POSTGRES_PASSWORD=pacsword \
@@ -103,7 +103,7 @@ This optional environment variable can be used to define another location - like
 
     ```console
     $ docker run --name mypostgres-slave \
-                 -p 25432:5432 \
+                 -p 5432:5432 \
                  -e POSTGRES_DB=pacsdb \
                  -e POSTGRES_USER=pacs \
                  -e POSTGRES_PASSWORD=pacsword \
