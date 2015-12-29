@@ -82,7 +82,7 @@ This optional environment variable can be used to define another location - like
     ```console
     $ docker run -v /var/local/mypacs/slave_db:/var/lib/postgresql/data \
                  --add-host=db:<mypostgres-master-ip> \
-                 --rm -it dcm4che/postgres-dcm4chee \
+                 --rm -it postgres \
                  su -c "pg_basebackup -h db -D /var/lib/postgresql/data -Ureplicator -P -v -x"
     ```
 6. Configure parameters needed for log-streaming replication standby in Recovery Configuration file `recovery.conf`:
