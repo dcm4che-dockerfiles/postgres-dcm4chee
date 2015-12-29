@@ -47,7 +47,7 @@ This optional environment variable can be used to define another location - like
 
     ```console
     $ docker run --name mypostgres-master \
-                 -p 15432:5432 \
+                 -p 5432:5432 \
                  -e POSTGRES_DB=pacsdb \
                  -e POSTGRES_USER=pacs \
                  -e POSTGRES_PASSWORD=pacsword \
