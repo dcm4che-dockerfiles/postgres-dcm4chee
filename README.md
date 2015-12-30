@@ -104,7 +104,22 @@ This optional environment variable can be used to define another location - like
     ```console
     $ docker run --name mypostgres-slave \
                  -p 5432:5432 \
+                 -e POSTGRES_DB=pacsdb \
+                 -e POSTGRES_USER=pacs \
+                 -e POSTGRES_PASSWORD=pacsword \
                  -v /var/local/mypacs/slave_db:/var/lib/postgresql/data \
                  --add-host=db:<mypostgres-master-ip> \
                  -d postgres
     ```
+
+## Initiate failover from 'master' to 'slave'
+
+1. Create trigger file `failover` in the data directory of the slave DB:
+
+    ```console
+    $ touch /var/local/mypacs/slave_db/failover
+    ```
+
+  Postgres will rename Recovery Configuration file `recovery.conf` to `recovery.done`, indicating
+  that the 'slave' DB is no longer in standby mode, but is acting as new master.
+  
