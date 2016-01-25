@@ -15,7 +15,7 @@ create table series (pk int8 not null, body_part varchar(255) not null, created_
 create table series_query_attrs (pk int8 not null, availability int4, num_instances int4, retrieve_aets varchar(255), view_id varchar(255), series_fk int8 not null, primary key (pk));
 create table series_req (pk int8 not null, accession_no varchar(255) not null, req_proc_id varchar(255) not null, req_service varchar(255) not null, sps_id varchar(255) not null, study_iuid varchar(255) not null, accno_issuer_fk int8, req_phys_name_fk int8, series_fk int8, primary key (pk));
 create table soundex_code (pk int8 not null, sx_code_value varchar(255) not null, sx_pn_comp_part int4 not null, sx_pn_comp int4 not null, person_name_fk int8 not null, primary key (pk));
-create table study (pk int8 not null, access_control_id varchar(255), access_time timestamp not null, accession_no varchar(255) not null, created_time timestamp not null, scattered_storage boolean not null, study_custom1 varchar(255) not null, study_custom2 varchar(255) not null, study_custom3 varchar(255) not null, study_date varchar(255) not null, study_desc varchar(255) not null, study_id varchar(255) not null, study_iuid varchar(255) not null, study_time varchar(255) not null, updated_time timestamp not null, version int8, dicomattrs_fk int8 not null, accno_issuer_fk int8, patient_fk int8 not null, ref_phys_name_fk int8, primary key (pk));
+create table study (pk int8 not null, access_control_id varchar(255) not null, access_time timestamp not null, accession_no varchar(255) not null, created_time timestamp not null, scattered_storage boolean not null, study_custom1 varchar(255) not null, study_custom2 varchar(255) not null, study_custom3 varchar(255) not null, study_date varchar(255) not null, study_desc varchar(255) not null, study_id varchar(255) not null, study_iuid varchar(255) not null, study_time varchar(255) not null, updated_time timestamp not null, version int8, dicomattrs_fk int8 not null, accno_issuer_fk int8, patient_fk int8 not null, ref_phys_name_fk int8, primary key (pk));
 create table study_query_attrs (pk int8 not null, availability int4, mods_in_study varchar(255), num_instances int4, num_series int4, retrieve_aets varchar(255), cuids_in_study varchar(255), view_id varchar(255), study_fk int8 not null, primary key (pk));
 create table verify_observer (pk int8 not null, verify_datetime varchar(255) not null, observer_name_fk int8, instance_fk int8, primary key (pk));
 alter table code add constraint UK_sb4oc9lkns36wswku831c33w6  unique (code_value, code_designator, code_version);
@@ -89,6 +89,7 @@ create index UK_3dxkqfajcytiwjjb5rgh4nu1l on soundex_code (sx_code_value);
 alter table study add constraint UK_5w0oynbw061mwu1rr9mrb6kj4  unique (dicomattrs_fk);
 alter table study add constraint UK_pt5qn20x278wb1f7p2t3lcxv  unique (study_iuid);
 create index UK_q8k2sl3kjl18qg1nr19l47tl1 on study (access_time);
+create index UK_24av2ewa70e7cykl340n63aqd on study (access_control_id);
 create index UK_a1rewlmf8uxfgshk25f6uawx2 on study (study_date);
 create index UK_16t2xvj9ttyvbwh1ijeve01ii on study (study_time);
 create index UK_2ofn5q0fdfc6941e5j34bplmv on study (accession_no);
