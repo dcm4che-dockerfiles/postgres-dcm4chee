@@ -1,4 +1,4 @@
-create table code (pk int8 not null, code_meaning varchar(255) not null, code_value varchar(255) not null, code_designator varchar(255) not null, code_version varchar(255), primary key (pk));
+create table code (pk int8 not null, code_meaning varchar(255) not null, code_value varchar(255) not null, code_designator varchar(255) not null, code_version varchar(255) not null, primary key (pk));
 create table content_item (pk int8 not null, rel_type varchar(255) not null, text_value varchar(255), code_fk int8, name_fk int8 not null, instance_fk int8, primary key (pk));
 create table dicomattrs (pk int8 not null, attrs bytea not null, primary key (pk));
 create table export_task (pk int8 not null, device_name varchar(255) not null, exporter_id varchar(255) not null, scheduled_time timestamp not null, series_iuid varchar(255) not null, sop_iuid varchar(255) not null, study_iuid varchar(255) not null, version int8, primary key (pk));
@@ -19,7 +19,7 @@ create table soundex_code (pk int8 not null, sx_code_value varchar(255) not null
 create table study (pk int8 not null, access_control_id varchar(255) not null, access_time timestamp not null, accession_no varchar(255) not null, created_time timestamp not null, failed_retrieves int4 not null, failed_iuids varchar(4000), scattered_storage boolean not null, study_custom1 varchar(255) not null, study_custom2 varchar(255) not null, study_custom3 varchar(255) not null, study_date varchar(255) not null, study_desc varchar(255) not null, study_id varchar(255) not null, study_iuid varchar(255) not null, study_time varchar(255) not null, updated_time timestamp not null, version int8, dicomattrs_fk int8 not null, accno_issuer_fk int8, patient_fk int8 not null, ref_phys_name_fk int8, primary key (pk));
 create table study_query_attrs (pk int8 not null, availability int4, mods_in_study varchar(255), num_instances int4, num_series int4, retrieve_aets varchar(255), cuids_in_study varchar(255), view_id varchar(255), study_fk int8 not null, primary key (pk));
 create table verify_observer (pk int8 not null, verify_datetime varchar(255) not null, observer_name_fk int8, instance_fk int8, primary key (pk));
-alter table code add constraint UK_l01jou0o1rohy7a9p933ndrxg  unique (code_value, code_designator);
+alter table code add constraint UK_sb4oc9lkns36wswku831c33w6  unique (code_value, code_designator, code_version);
 create index UK_i715nk4mi378f9bxflvfroa5a on content_item (rel_type);
 create index UK_6iism30y000w85v649ju968sv on content_item (text_value);
 alter table export_task add constraint UK_aoqbyfnen6evu73ltc1osexfr  unique (exporter_id, study_iuid, series_iuid, sop_iuid);
