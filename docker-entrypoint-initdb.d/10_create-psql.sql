@@ -6,7 +6,7 @@ create table ian_task (pk int8 not null, calling_aet varchar(255) not null, devi
 create table id_sequence (name varchar(255) not null, next_value int4 not null, version int8, primary key (name));
 create table instance (pk int8 not null, availability int4 not null, sr_complete varchar(255) not null, content_date varchar(255) not null, content_time varchar(255) not null, created_time timestamp not null, inst_custom1 varchar(255) not null, inst_custom2 varchar(255) not null, inst_custom3 varchar(255) not null, inst_no varchar(255) not null, retrieve_aets varchar(255), sop_cuid varchar(255) not null, sop_iuid varchar(255) not null, updated_time timestamp not null, sr_verified varchar(255) not null, version int8, dicomattrs_fk int8 not null, srcode_fk int8, reject_code_fk int8, series_fk int8 not null, primary key (pk));
 create table issuer (pk int8 not null, entity_id varchar(255), entity_uid varchar(255), entity_uid_type varchar(255), primary key (pk));
-create table location (pk int8 not null, created_time timestamp not null, digest varchar(255), object_size int8 not null, status int4 not null, storage_id varchar(255) not null, storage_path varchar(255) not null, tsuid varchar(255) not null, instance_fk int8, primary key (pk));
+create table location (pk int8 not null, created_time timestamp not null, digest varchar(255), multi_ref int4, object_type int4 not null, object_size int8 not null, status int4 not null, storage_id varchar(255) not null, storage_path varchar(255) not null, tsuid varchar(255), instance_fk int8, uidmap_fk int8, primary key (pk));
 create table mpps (pk int8 not null, accession_no varchar(255) not null, created_time timestamp not null, pps_start_date varchar(255) not null, pps_start_time varchar(255) not null, sop_iuid varchar(255) not null, pps_status int4 not null, study_iuid varchar(255) not null, updated_time timestamp not null, version int8, dicomattrs_fk int8 not null, discreason_code_fk int8, accno_issuer_fk int8, patient_fk int8 not null, primary key (pk));
 create table mwl_item (pk int8 not null, accession_no varchar(255) not null, created_time timestamp not null, modality varchar(255) not null, req_proc_id varchar(255) not null, sps_id varchar(255) not null, sps_start_date varchar(255) not null, sps_start_time varchar(255) not null, sps_status int4 not null, study_iuid varchar(255) not null, updated_time timestamp not null, version int8, dicomattrs_fk int8 not null, accno_issuer_fk int8, patient_fk int8 not null, perf_phys_name_fk int8, primary key (pk));
 create table patient (pk int8 not null, created_time timestamp not null, pat_birthdate varchar(255) not null, pat_custom1 varchar(255) not null, pat_custom2 varchar(255) not null, pat_custom3 varchar(255) not null, pat_sex varchar(255) not null, updated_time timestamp not null, version int8, dicomattrs_fk int8 not null, merge_fk int8, patient_id_fk int8, pat_name_fk int8, primary key (pk));
@@ -21,6 +21,7 @@ create table soundex_code (pk int8 not null, sx_code_value varchar(255) not null
 create table sps_station_aet (pk int8 not null, station_aet varchar(255) not null, mwl_item_fk int8 not null, primary key (pk));
 create table study (pk int8 not null, access_control_id varchar(255) not null, access_time timestamp not null, accession_no varchar(255) not null, created_time timestamp not null, expiration_date varchar(255), failed_retrieves int4 not null, failed_iuids varchar(4000), rejection_state int4 not null, storage_ids varchar(255) not null, study_custom1 varchar(255) not null, study_custom2 varchar(255) not null, study_custom3 varchar(255) not null, study_date varchar(255) not null, study_desc varchar(255) not null, study_id varchar(255) not null, study_iuid varchar(255) not null, study_time varchar(255) not null, updated_time timestamp not null, version int8, dicomattrs_fk int8 not null, accno_issuer_fk int8, patient_fk int8 not null, ref_phys_name_fk int8, primary key (pk));
 create table study_query_attrs (pk int8 not null, availability int4, mods_in_study varchar(255), num_instances int4, num_series int4, retrieve_aets varchar(255), cuids_in_study varchar(255), view_id varchar(255), study_fk int8 not null, primary key (pk));
+create table uidmap (pk int8 not null, uidmap bytea not null, primary key (pk));
 create table verify_observer (pk int8 not null, verify_datetime varchar(255) not null, observer_name_fk int8, instance_fk int8, primary key (pk));
 alter table code add constraint UK_sb4oc9lkns36wswku831c33w6  unique (code_value, code_designator, code_version);
 create index UK_i715nk4mi378f9bxflvfroa5a on content_item (rel_type);
@@ -45,6 +46,7 @@ create index UK_q5i0hxt1iyahxjiroux2h8imm on instance (inst_custom3);
 alter table issuer add constraint UK_gknfxd1vh283cmbg8ymia9ms8  unique (entity_id);
 alter table issuer add constraint UK_t1p7jajas0mu12sx8jvtp2y0f  unique (entity_uid, entity_uid_type);
 create index UK_r3oh859i9osv3aluoc8dcx9wk on location (storage_id, status);
+create index UK_i1lnahmehau3r3j9pdyxg3p3y on location (multi_ref);
 alter table mpps add constraint UK_o49fec996jvdo31o7ysmsn9s2  unique (dicomattrs_fk);
 alter table mpps add constraint UK_cyqglxijg7kebbj6oj821yx4d  unique (sop_iuid);
 alter table mwl_item add constraint UK_6qj8tkh6ib9w2pjqwvqe23ko  unique (dicomattrs_fk);
@@ -131,6 +133,7 @@ alter table instance add constraint FK_7w6f9bi2w91qr2abl6ddxnrwq foreign key (sr
 alter table instance add constraint FK_6pnwsvi69g5ypye6gjo26vn7e foreign key (reject_code_fk) references code;
 alter table instance add constraint FK_s4tgrew4sh4qxoupmk3gihtrk foreign key (series_fk) references series;
 alter table location add constraint FK_hjtlcwsvwihs4khh961d423e7 foreign key (instance_fk) references instance;
+alter table location add constraint FK_bfk5vl6eoxaf0hhwiu3rbgmkn foreign key (uidmap_fk) references uidmap;
 alter table mpps add constraint FK_o49fec996jvdo31o7ysmsn9s2 foreign key (dicomattrs_fk) references dicomattrs;
 alter table mpps add constraint FK_nrigpgue611m33rao03nnfe5l foreign key (discreason_code_fk) references code;
 alter table mpps add constraint FK_grl2idmms10qq4lhmh909jxtj foreign key (accno_issuer_fk) references issuer;
@@ -184,4 +187,5 @@ create sequence soundex_code_pk_seq;
 create sequence sps_station_aet_pk_seq;
 create sequence study_pk_seq;
 create sequence study_query_attrs_pk_seq;
+create sequence uidmap_pk_seq;
 create sequence verify_observer_pk_seq;
