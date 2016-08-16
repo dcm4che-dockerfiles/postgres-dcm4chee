@@ -62,6 +62,7 @@ create index UK_m20xnkg1iqetifvuegehbhekm on mwl_item (sps_start_time);
 create index UK_3oigo76r1a7et491bkci96km8 on mwl_item (sps_status);
 alter table patient add constraint UK_5lgndn3gn7iug3kuewiy9q124  unique (dicomattrs_fk);
 alter table patient add constraint UK_39gahcxyursxfxe2ucextr65s  unique (patient_id_fk);
+create index UK_296rccryifu6d8byisl2f4dvq on patient (num_studies);
 create index UK_1ho1jyofty54ip8aqpuhi4mu1 on patient (pat_birthdate);
 create index UK_545wp9un24fhgcy2lcfu1o04y on patient (pat_sex);
 create index UK_9f2m2lkijm7wi0hpjsime069n on patient (pat_custom1);
