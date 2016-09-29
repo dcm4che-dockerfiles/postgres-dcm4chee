@@ -116,7 +116,6 @@ create index UK_3dxkqfajcytiwjjb5rgh4nu1l on soundex_code (sx_code_value);
 create index UK_tm93u8kuxnasoguns5asgdx4a on sps_station_aet (station_aet);
 alter table stgcmt_result add constraint UK_ey6qpep2qtiwayou7pd0vj22w  unique (transaction_uid);
 create index UK_qko59fn9pb87j1eu070ilfkhm on stgcmt_result (updated_time);
-create index UK_ey6qpep2qtiwayou7pd0vj22w on stgcmt_result (transaction_uid);
 create index UK_7ltjgxoijy15rrwihl8euv7vh on stgcmt_result (device_name);
 create index UK_gu96kxnbf2p84d1katepo0btq on stgcmt_result (exporter_id);
 create index UK_p65blcj4h0uh2itb0bp49mc07 on stgcmt_result (study_iuid);
