@@ -19,7 +19,7 @@ create table series (pk int8 not null, body_part varchar(255) not null, created_
 create table series_query_attrs (pk int8 not null, availability int4, num_instances int4, retrieve_aets varchar(255), view_id varchar(255), series_fk int8 not null, primary key (pk));
 create table series_req (pk int8 not null, accession_no varchar(255) not null, req_proc_id varchar(255) not null, req_service varchar(255) not null, sps_id varchar(255) not null, study_iuid varchar(255) not null, accno_issuer_fk int8, req_phys_name_fk int8, series_fk int8, primary key (pk));
 create table soundex_code (pk int8 not null, sx_code_value varchar(255) not null, sx_pn_comp_part int4 not null, sx_pn_comp int4 not null, person_name_fk int8 not null, primary key (pk));
-create table sps_station_aet (pk int8 not null, station_aet varchar(255) not null, mwl_item_fk int8 not null, primary key (pk));
+create table sps_station_aet (mwl_item_fk int8 not null, station_aet varchar(255));
 create table stgcmt_result (pk int8 not null, created_time timestamp not null, device_name varchar(255) not null, exporter_id varchar(255) not null, num_failures int4, num_instances int4, series_iuid varchar(255), sop_iuid varchar(255), stgcmt_status int4 not null, study_iuid varchar(255) not null, transaction_uid varchar(255) not null, updated_time timestamp not null, primary key (pk));
 create table study (pk int8 not null, access_control_id varchar(255) not null, access_time timestamp not null, accession_no varchar(255) not null, created_time timestamp not null, expiration_date varchar(255), failed_retrieves int4 not null, failed_iuids varchar(4000), rejection_state int4 not null, storage_ids varchar(255), study_custom1 varchar(255) not null, study_custom2 varchar(255) not null, study_custom3 varchar(255) not null, study_date varchar(255) not null, study_desc varchar(255) not null, study_id varchar(255) not null, study_iuid varchar(255) not null, study_time varchar(255) not null, updated_time timestamp not null, version int8, dicomattrs_fk int8 not null, accno_issuer_fk int8, patient_fk int8 not null, ref_phys_name_fk int8, primary key (pk));
 create table study_ext_retrieve_aet (study_fk int8 not null, retrieve_aet varchar(255));
@@ -202,7 +202,6 @@ create sequence series_pk_seq;
 create sequence series_query_attrs_pk_seq;
 create sequence series_req_pk_seq;
 create sequence soundex_code_pk_seq;
-create sequence sps_station_aet_pk_seq;
 create sequence stgcmt_result_pk_seq;
 create sequence study_pk_seq;
 create sequence study_query_attrs_pk_seq;
