@@ -60,7 +60,6 @@ This optional environment variable can be used to define another location - like
     $ echo 'host replication replicator 0.0.0.0/0 trust' >> /path/to/db1/pg_hba.conf
     $ cat << EOF >> /path/to/db1/postgresql.conf
     wal_level = hot_standby
-    checkpoint_segments = 8
     max_wal_senders = 3
     wal_keep_segments = 8
     hot_standby = on
