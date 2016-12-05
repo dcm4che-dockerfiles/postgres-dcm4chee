@@ -1,3 +1,7 @@
+alter table study add modified_time timestamp;
+update study set modified_time = updated_time;
+alter table study alter modified_time set not null;
+
 create table metadata (pk int8 not null, digest varchar(255), object_size int8 not null, status int4 not null, storage_id varchar(255) not null, storage_path varchar(255) not null, primary key (pk));
 
 alter table series add metadata_update_time timestamp, add metadata_fk int8, add inst_purge_time timestamp, add inst_purge_state int4;
