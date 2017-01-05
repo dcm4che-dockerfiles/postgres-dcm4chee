@@ -2,7 +2,7 @@ create table code (pk int8 not null, code_meaning varchar(255) not null, code_va
 create table content_item (pk int8 not null, rel_type varchar(255) not null, text_value varchar(255), code_fk int8, name_fk int8 not null, instance_fk int8, primary key (pk));
 create table dicomattrs (pk int8 not null, attrs bytea not null, primary key (pk));
 create table export_task (pk int8 not null, device_name varchar(255) not null, exporter_id varchar(255) not null, scheduled_time timestamp not null, series_iuid varchar(255) not null, sop_iuid varchar(255) not null, study_iuid varchar(255) not null, version int8, primary key (pk));
-create table hl7psu_task (pk int8 not null, called_aet varchar(255) not null, device_name varchar(255) not null, hl7psu_dests varchar(255) not null, scheduled_time timestamp, study_iuid varchar(255), mpps_fk int8, mwl_fk int8, primary key (pk));
+create table hl7psu_task (pk int8 not null, aet varchar(255) not null, created_time timestamp not null, device_name varchar(255) not null, scheduled_time timestamp, study_iuid varchar(255), mpps_fk int8, primary key (pk));
 create table ian_task (pk int8 not null, calling_aet varchar(255) not null, device_name varchar(255) not null, ian_dests varchar(255) not null, scheduled_time timestamp, study_iuid varchar(255), mpps_fk int8, primary key (pk));
 create table id_sequence (name varchar(255) not null, next_value int4 not null, version int8, primary key (name));
 create table instance (pk int8 not null, availability int4 not null, sr_complete varchar(255) not null, content_date varchar(255) not null, content_time varchar(255) not null, created_time timestamp not null, ext_retrieve_aet varchar(255), inst_custom1 varchar(255) not null, inst_custom2 varchar(255) not null, inst_custom3 varchar(255) not null, inst_no int4, num_frames int4, retrieve_aets varchar(255), sop_cuid varchar(255) not null, sop_iuid varchar(255) not null, updated_time timestamp not null, sr_verified varchar(255) not null, version int8, dicomattrs_fk int8 not null, srcode_fk int8, reject_code_fk int8, series_fk int8 not null, primary key (pk));
@@ -149,7 +149,6 @@ alter table content_item add constraint FK_gudw6viy7lrf5t5hetw7mbgh5 foreign key
 alter table content_item add constraint FK_pyrd1nhijag5ct0ee9xqq4h78 foreign key (name_fk) references code;
 alter table content_item add constraint FK_9kpe6whsov3ur9rph4ih2vi5a foreign key (instance_fk) references instance;
 alter table hl7psu_task add constraint FK_pev4urgkk7id2h1ijhv8domjx foreign key (mpps_fk) references mpps;
-alter table hl7psu_task add constraint FK_2wwvkvaqkua4ljwt40oa3warw foreign key (mwl_fk) references mwl_item;
 alter table ian_task add constraint FK_1fuh251le2hid2byw90hd1mly foreign key (mpps_fk) references mpps;
 alter table instance add constraint FK_jxfu47kwjk3kkkyrwewjw8a4n foreign key (dicomattrs_fk) references dicomattrs;
 alter table instance add constraint FK_7w6f9bi2w91qr2abl6ddxnrwq foreign key (srcode_fk) references code;
