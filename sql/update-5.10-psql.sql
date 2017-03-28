@@ -1,6 +1,7 @@
 update study set ext_retrieve_aet = '*' where ext_retrieve_aet is null;
 alter table study alter ext_retrieve_aet set not null;
 
+alter table queue_msg alter queue_name set not null;
 alter table export_task add created_time timestamp, add updated_time timestamp, add num_instances int4, add modalities varchar(255), add queue_msg_fk int8;
 update export_task set created_time = current_timestamp, updated_time = current_timestamp;
 alter table export_task alter created_time set not null, alter updated_time set not null;
