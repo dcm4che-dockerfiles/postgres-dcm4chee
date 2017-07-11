@@ -7,18 +7,18 @@ It extends the [official postgres image](https://hub.docker.com/_/postgres/).
 ## start a postgres instance
 
 ```console
-$ docker run --name mypostgres \
+$ docker run --name postgres \
              -p 5432:5432 \
              -e POSTGRES_DB=pacsdb \
              -e POSTGRES_USER=pacs \
-             -e POSTGRES_PASSWORD=pacsword \
+             -e POSTGRES_PASSWORD=pacs \
              -v /var/local/mypacs/db:/var/lib/postgresql/data \
-             -d dcm4che/postgres-dcm4chee
+             -d dcm4che/postgres-dcm4chee:9.6-10
 ```
 ## connect to it from the DICOM Archive application
 
 ```console
-$ docker run --link mypostgres:db ... -d dcm4che/dcm4chee-arc-psql
+$ docker run --link postgres:db ... -d dcm4che/dcm4chee-arc-psql
 ```
 
 ## Environment Variables
@@ -27,11 +27,12 @@ This image does not define additional environment variables to those inherited f
 
 ### `POSTGRES_PASSWORD`
 
-This environment variable sets the superuser password for PostgreSQL. In the above example, it is being set to "pacsword".
+This environment variable sets the superuser password for PostgreSQL. In the above example, it is being set to "pacs".
 
 ### `POSTGRES_USER`
 
-This environment variable is used in conjunction with `POSTGRES_PASSWORD` to set a user and its password. This variable will create the specified user with superuser power.
+This environment variable is used in conjunction with `POSTGRES_PASSWORD` to set a user and its password. This variable 
+will create the specified user with superuser power. In the above example, it is being set to "pacs". 
 
 ### `POSTGRES_DB`
 
