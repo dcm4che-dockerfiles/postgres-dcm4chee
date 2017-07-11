@@ -15,11 +15,6 @@ $ docker run --name postgres \
              -v /var/local/mypacs/db:/var/lib/postgresql/data \
              -d dcm4che/postgres-dcm4chee:9.6-10
 ```
-## connect to it from the DICOM Archive application
-
-```console
-$ docker run --link postgres:db ... -d dcm4che/dcm4chee-arc-psql
-```
 
 ## Environment Variables
 
