@@ -152,7 +152,7 @@ created to contain the data.
     ```
 4. Configure parameters needed for log-streaming replication standby in Recovery Configuration file `recovery.conf`:
 
-    ```console
+    ```
     $ cat << EOF > /path/to/db1/recovery.conf
     primary_conninfo = 'host=<ip-of-db2-host> port=5432 user=replicator password=replpass'
     trigger_file = '/var/lib/postgresql/data/failover'
