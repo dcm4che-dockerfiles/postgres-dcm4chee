@@ -16,6 +16,7 @@ create table patient_id (pk int8 not null, pat_id varchar(255) not null, pat_id_
 create table person_name (pk int8 not null, family_name varchar(255), given_name varchar(255), i_family_name varchar(255), i_given_name varchar(255), i_middle_name varchar(255), i_name_prefix varchar(255), i_name_suffix varchar(255), middle_name varchar(255), name_prefix varchar(255), name_suffix varchar(255), p_family_name varchar(255), p_given_name varchar(255), p_middle_name varchar(255), p_name_prefix varchar(255), p_name_suffix varchar(255), primary key (pk));
 create table queue_msg (pk int8 not null, created_time timestamp not null, error_msg varchar(255), msg_body bytea not null, msg_id varchar(255) not null, msg_props varchar(4000) not null, num_failures int4 not null, outcome_msg varchar(255), proc_end_time timestamp, proc_start_time timestamp, queue_name varchar(255) not null, scheduled_time timestamp not null, msg_status int4 not null, updated_time timestamp not null, version int8, primary key (pk));
 create table rel_study_pcode (study_fk int8 not null, pcode_fk int8 not null);
+create table retrieve_task (pk int8 not null, completed int4 not null, created_time timestamp not null, destination_aet varchar(255) not null, device_name varchar(255) not null, error_comment varchar(255), failed int4 not null, local_aet varchar(255) not null, remaining int4 not null, remote_aet varchar(255) not null, series_iuid varchar(255), sop_iuid varchar(255), status_code int4 not null, study_iuid varchar(255) not null, updated_time timestamp not null, warning int4 not null, queue_msg_fk int8 not null, primary key (pk));
 create table series (pk int8 not null, body_part varchar(255) not null, completeness int4 not null, created_time timestamp not null, expiration_date varchar(255), ext_retrieve_aet varchar(255), failed_retrieves int4 not null, inst_purge_state int4 not null, inst_purge_time timestamp, institution varchar(255) not null, department varchar(255) not null, laterality varchar(255) not null, metadata_update_time timestamp, modality varchar(255) not null, pps_cuid varchar(255) not null, pps_iuid varchar(255) not null, pps_start_date varchar(255) not null, pps_start_time varchar(255) not null, rejection_state int4 not null, series_custom1 varchar(255) not null, series_custom2 varchar(255) not null, series_custom3 varchar(255) not null, series_desc varchar(255) not null, series_iuid varchar(255) not null, series_no int4, src_aet varchar(255), station_name varchar(255) not null, updated_time timestamp not null, version int8, dicomattrs_fk int8 not null, inst_code_fk int8, metadata_fk int8, perf_phys_name_fk int8, study_fk int8 not null, primary key (pk));
 create table series_query_attrs (pk int8 not null, availability int4, num_instances int4, retrieve_aets varchar(255), cuids_in_series varchar(255), view_id varchar(255), series_fk int8 not null, primary key (pk));
 create table series_req (pk int8 not null, accession_no varchar(255) not null, req_proc_id varchar(255) not null, req_service varchar(255) not null, sps_id varchar(255) not null, study_iuid varchar(255) not null, accno_issuer_fk int8, req_phys_name_fk int8, series_fk int8, primary key (pk));
@@ -90,6 +91,12 @@ alter table queue_msg add constraint UK_k520j369nwx6rpbkvlp4kn623  unique (msg_i
 create index UK_b5mbe6jenklf1r5wp5csrvf67 on queue_msg (queue_name);
 create index UK_o8pu8axwpcm4chqxy75y09gpo on queue_msg (msg_status);
 create index UK_gsdfgth9kxjat98cmabtj8x1h on queue_msg (updated_time);
+alter table retrieve_task add constraint UK_mxokt1gw5g1e7rc3ssotvuqix  unique (queue_msg_fk);
+create index UK_djkqk3dls3xkru1n0c3p5rm3 on retrieve_task (device_name);
+create index UK_a26s4yqy4rnpw7nniuyt7tkpo on retrieve_task (local_aet);
+create index UK_3avjusmul00fc3yi1notyh16j on retrieve_task (remote_aet);
+create index UK_jgaej0gm9appih04n09qto8yh on retrieve_task (destination_aet);
+create index UK_gafcma0d5wwdjlq8jueqknlq0 on retrieve_task (study_iuid);
 alter table series add constraint UK_bdj2kuutidekc2en6dckev7l6  unique (dicomattrs_fk);
 alter table series add constraint UK_83y2fx8cou17h3xggxspgikna  unique (study_fk, series_iuid);
 create index UK_jlgy9ifvqak4g2bxkchismw8x on series (rejection_state);
@@ -174,6 +181,7 @@ alter table patient add constraint FK_39gahcxyursxfxe2ucextr65s foreign key (pat
 alter table patient add constraint FK_rj42ffdtimnrcwmqqlvj24gi2 foreign key (pat_name_fk) references person_name;
 alter table patient add constraint FK_56r2g5ggptqgcvb3hl11adke2 foreign key (resp_person_fk) references person_name;
 alter table patient_id add constraint FK_oo232lt89k1b5h8mberi9v152 foreign key (issuer_fk) references issuer;
+alter table retrieve_task add constraint FK_mxokt1gw5g1e7rc3ssotvuqix foreign key (queue_msg_fk) references queue_msg;
 alter table rel_study_pcode add constraint FK_fryhnb2ppb6fcop3jrrfwvnfy foreign key (pcode_fk) references code;
 alter table rel_study_pcode add constraint FK_mnahh8fh77d365m6w2x4x3f4q foreign key (study_fk) references study;
 alter table series add constraint FK_bdj2kuutidekc2en6dckev7l6 foreign key (dicomattrs_fk) references dicomattrs;
@@ -210,6 +218,7 @@ create sequence patient_id_pk_seq;
 create sequence patient_pk_seq;
 create sequence person_name_pk_seq;
 create sequence queue_msg_pk_seq;
+create sequence retrieve_task_pk_seq;
 create sequence series_pk_seq;
 create sequence series_query_attrs_pk_seq;
 create sequence series_req_pk_seq;
