@@ -14,7 +14,7 @@ $ docker run --name postgres \
            -e POSTGRES_USER=pacs\
            -e POSTGRES_PASSWORD=pacs \
            -v /var/local/dcm4chee-arc/db:/var/lib/postgresql/data \
-           -d dcm4che/postgres-dcm4chee:9.6-10
+           -d dcm4che/postgres-dcm4chee:10.0-12
 ````
 
 ## connect to it from the DICOM Archive application
