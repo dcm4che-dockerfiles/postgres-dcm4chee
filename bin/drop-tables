@@ -1,0 +1,3 @@
+#!/bin/sh
+
+psql $POSTGRES_DB $POSTGRES_USER < /sql/drop-psql.sql
