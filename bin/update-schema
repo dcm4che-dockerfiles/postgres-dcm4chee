@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [[ $1 ]]; then
+if [ $1 ]; then
     psql $POSTGRES_DB $POSTGRES_USER -a -f /sql/update-$1-psql.sql
 else
     echo "usage: $0 <version>[-1|-2|-3]
