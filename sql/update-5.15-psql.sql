@@ -1,4 +1,4 @@
--- part 1: can be applied on archive running old archive 5.14
+-- part 1: can be applied on archive running archive 5.14
 alter table patient
   add verification_status int4,
   add failed_verifications int4,
@@ -18,5 +18,5 @@ create index UK_f718gnu5js0mdg39q6j7fklia on stgcmt_result (batch_id);
 update patient set verification_status = 0, failed_verifications = 0
   where verification_status is null;
 
--- part 3: can be applied after already starting archive 5.15
+-- part 3: can be applied on already running archive 5.15
 alter table patient alter verification_status set not null, alter failed_verifications set not null;

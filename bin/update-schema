@@ -1,0 +1,4 @@
+#!/bin/sh
+VERSION=$1; shift
+
+psql $POSTGRES_DB $POSTGRES_USER < /sql/update-$VERSION-psql.sql

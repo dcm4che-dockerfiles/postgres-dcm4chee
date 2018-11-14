@@ -22,11 +22,3 @@ create index UK_889438ocqfrvybu3k2eo65lpa on series (compress_failures);
 create index FK_hch5fanx7ejwew2ag2ividq9r on stgver_task (queue_msg_fk) ;
 
 create sequence stgver_task_pk_seq;
-
--- part 2: have to be applied while archive is stopped
-update series set stgver_failures = 0, compress_failures = 0 where stgver_failures is null;
-
--- part 3: can be applied on already running archive 5.14
-alter table series
-  alter stgver_failures set not null,
-  alter compress_failures set not null;
