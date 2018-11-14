@@ -1,0 +1,5 @@
+#!/bin/sh
+
+psql $POSTGRES_DB $POSTGRES_USER < /docker-entrypoint-initdb.d/10_create-psql.sql
+psql $POSTGRES_DB $POSTGRES_USER < /docker-entrypoint-initdb.d/20_create-fk-index.sql
+psql $POSTGRES_DB $POSTGRES_USER < /docker-entrypoint-initdb.d/30_create-case-insensitive-index.sql
