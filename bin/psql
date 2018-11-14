@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [[ $1 ]]; then
+if [ $1 ]; then
     psql $POSTGRES_DB $POSTGRES_USER -a -f $1
 else
     psql $POSTGRES_DB $POSTGRES_USER
