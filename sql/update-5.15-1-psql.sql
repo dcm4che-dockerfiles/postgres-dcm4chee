@@ -1,4 +1,4 @@
--- part 1: can be applied on archive running old archive 5.14
+-- part 1: can be applied on archive running archive 5.14
 alter table patient
   add verification_status int4,
   add failed_verifications int4,
