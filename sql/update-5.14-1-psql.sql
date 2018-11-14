@@ -22,3 +22,6 @@ create index UK_889438ocqfrvybu3k2eo65lpa on series (compress_failures);
 create index FK_hch5fanx7ejwew2ag2ividq9r on stgver_task (queue_msg_fk) ;
 
 create sequence stgver_task_pk_seq;
+
+-- repeat to load the index to memory and to have the db in the best possible state before switching off
+update series set stgver_failures = 0, compress_failures = 0 where stgver_failures is null;
