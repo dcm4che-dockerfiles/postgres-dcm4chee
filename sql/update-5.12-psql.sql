@@ -34,10 +34,10 @@ create index UK_tahx0q1ejidnsam40ans7oecx on series (tsuid);
 -- part 2: shall be applied on stopped archive before starting 5.12
 update queue_msg set device_name = retrieve_task.device_name
   from retrieve_task
-  where queue_msg_fk = queue_msg.pk and device_name is null;
+  where queue_msg_fk = queue_msg.pk and queue_msg.device_name is null;
 update queue_msg set device_name = export_task.device_name
   from export_task
-  where queue_msg_fk = queue_msg.pk and device_name is null;
+  where queue_msg_fk = queue_msg.pk and queue_msg.device_name is null;
 update queue_msg set device_name = 'dcm4chee-arc'
   where device_name is null;
 
@@ -55,7 +55,5 @@ update series set tsuid = (
 
 -- part 3: can be applied on already running archive 5.12
 alter table queue_msg alter device_name set not null;
-alter table series
-  alter sop_cuid set not null,
-  alter tsuid set not null;
+alter table series alter sop_cuid set not null, alter tsuid set not null;
 alter table retrieve_task drop device_name;
