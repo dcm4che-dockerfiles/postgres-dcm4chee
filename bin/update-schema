@@ -3,11 +3,11 @@
 if [ $1 ]; then
     psql $POSTGRES_DB $POSTGRES_USER -a -f /sql/update-$1-psql.sql
 else
-    echo "usage: $0 <version>[-1|-2|-3]
+    echo "usage: update-schema 5.##[-1|-2|-3]
 with suffix:
   -1 can be already applied on running previous archive version
-  -2 must be applied on stopped archive
+  -2 shall be applied on stopped archive before starting new archive version
   -3 can be applied on already running new archive version
 without suffix:
-  applies complete update - must be applied on stopped archive"
+  applies complete update - shall be applied on stopped archive before starting new archive version"
 fi
