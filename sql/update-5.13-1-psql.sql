@@ -18,7 +18,3 @@ alter table diff_task_attrs add constraint FK_72rsx022j2wu9noi6jldvq95r foreign 
 create sequence diff_task_pk_seq;
 create index FK_dlrthwe594xvfeta3kyuih3ip on diff_task (queue_msg_fk);
 create index FK_1sbjtesix8hkq310i84lfg0xi on diff_task_attrs (diff_task_fk);
-
--- part 2: shall be applied on stopped archive before starting 5.13
-
--- part 3: can be applied on already running archive 5.13

@@ -20,14 +20,3 @@ create index UK_gafcma0d5wwdjlq8jueqknlq0 on retrieve_task (study_iuid);
 create index UK_q7vxiaj1q6ojfxdq1g9jjxgqv on study (study_size);
 
 create index FK_mxokt1gw5g1e7rc3ssotvuqix on retrieve_task (queue_msg_fk);
-
--- part 2: shall be applied on stopped archive before starting 5.11
-update study set study_size = -1 where study_size is null;
-update series set series_size = -1 where series_size is null;
-update queue_msg set priority = 4 where priority is null;
-
--- part 3: can be applied on already running archive 5.11
-alter table study alter study_size set not null;
-alter table series alter series_size set not null;
-alter table queue_msg alter priority set not null;
-
