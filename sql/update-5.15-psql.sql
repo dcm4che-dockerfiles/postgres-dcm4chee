@@ -14,7 +14,7 @@ create index UK_bay8wkvwegw3pmyeypv2v93k1 on patient (verification_time);
 create index UK_4iih0m0ueyvaim3033di45ems on stgcmt_result (msg_id);
 create index UK_f718gnu5js0mdg39q6j7fklia on stgcmt_result (batch_id);
 
--- part 2: have to be applied while archive is stopped
+-- part 2: shall be applied on stopped archive before starting 5.15
 update patient set verification_status = 0, failed_verifications = 0
   where verification_status is null;
 
