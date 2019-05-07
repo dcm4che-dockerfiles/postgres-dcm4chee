@@ -5,4 +5,9 @@ update retrieve_task
         queue_name  = queue_msg.queue_name,
         batch_id    = queue_msg.batch_id
     from queue_msg
-    where queue_msg_fk = queue_msg.pk and retrieve_task.device_name is null ;
+    where queue_msg_fk = queue_msg.pk and retrieve_task.device_name is null;
+update series set metadata_update_failures = 0 where metadata_update_failures is null;
+update metadata
+    set created_time = series.updated_time
+    from series
+    where metadata.pk = metadata_fk and metadata.created_time is null;
