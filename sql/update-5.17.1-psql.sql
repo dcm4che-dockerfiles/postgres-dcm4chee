@@ -14,8 +14,14 @@ update retrieve_task
         batch_id    = queue_msg.batch_id
     from queue_msg
     where queue_msg_fk = queue_msg.pk;
+update series set metadata_update_failures = 0;
+update metadata
+    set created_time = series.updated_time
+    from series
+    where metadata.pk = metadata_fk;
 
 create index UK_ln9rs61la03lhvgiv8c2wehnr on queue_msg (batch_id);
 create index UK_djkqk3dls3xkru1n0c3p5rm3 on retrieve_task (device_name);
 create index UK_r866eptnxfw7plhxwtm3vks0e on retrieve_task (queue_name);
 create index UK_ahkqwir2di2jm44jlhi22iw3e on retrieve_task (batch_id);
+create index UK_6xqpk4cvy49wj41p2qwixro8w on series (metadata_update_failures);
