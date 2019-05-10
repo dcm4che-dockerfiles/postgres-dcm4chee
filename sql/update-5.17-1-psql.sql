@@ -6,6 +6,8 @@ alter table retrieve_task
     add batch_id varchar(255);
 alter table retrieve_task alter column queue_msg_fk drop not null;
 alter table stgcmt_result alter column exporter_id drop not null;
+alter table series add metadata_update_failures int4;
+alter table metadata add created_time timestamp;
 
 update queue_msg set batch_id = batchID;
 update retrieve_task
