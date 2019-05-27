@@ -29,14 +29,22 @@ This image does not define additional environment variables to those inherited f
 opposite to the base image, they are required - except `PGDATA` - to be specified, because the DICOM Archive
 application relies on their provision.
 
-### `POSTGRES_PASSWORD`
-
-This environment variable sets the superuser password for PostgreSQL. In the above example, it is being set to `pacs`.
-
 ### `POSTGRES_USER`
 
 This environment variable is used in conjunction with `POSTGRES_PASSWORD` to set a user and its password. This variable
 will create the specified user with superuser power.
+
+### `POSTGRES_USER_FILE`
+
+Superuser via file input (alternative to `POSTGRES_USER`). 
+
+### `POSTGRES_PASSWORD`
+
+Superuser password for PostgreSQL. In the above example, it is being set to `pacs`.
+
+### `POSTGRES_PASSWORD_FILE`
+
+Superuser password for PostgreSQL via file input (alternative to `POSTGRES_PASSWORD`). 
 
 ### `POSTGRES_DB`
 
