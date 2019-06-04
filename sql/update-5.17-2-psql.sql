@@ -11,3 +11,4 @@ update metadata
     set created_time = series.updated_time
     from series
     where metadata.pk = metadata_fk and metadata.created_time is null;
+update metadata set created_time='2000-01-01 00:00:00' where status != 0 and created_time is null;
