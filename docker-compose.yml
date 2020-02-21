@@ -1,7 +1,7 @@
 version: "3"
 services:
    db:
-    image: dcm4che/postgres-dcm4chee:11.2-17
+    image: dcm4che/postgres-dcm4chee:12.2-22
     environment:
       POSTGRES_DB: pacsdb
       POSTGRES_USER: pacs
