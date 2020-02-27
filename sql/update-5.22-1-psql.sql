@@ -1,5 +1,6 @@
--- part 1: can be applied on archive running archive 5.21
+- part 1: can be applied on archive running archive 5.21
 alter table mwl_item
+    add local_aet varchar(255),
     add admission_id varchar(255),
     add institution varchar(255),
     add department varchar(255),
@@ -19,9 +20,10 @@ alter table study_query_attrs
 
 alter table hl7psu_task add column series_iuid varchar(255);
 
-update mwl_item set admission_id = '*', institution = '*', department = '*';
+update mwl_item set local_aet = '*', admission_id = '*', institution = '*', department = '*';
 update study set admission_id = '*';
 
+create index UK_9ockpkbetj7a97for0s1jhasi on mwl_item (local_aet);
 create index UK_tlkw80b7pbutfj19vh6et2vs7 on mwl_item (admission_id);
 create index UK_8qkftk7n30hla3v1frep9vg2q on mwl_item (institution);
 create index UK_ksy3uy0rvpis1sqqeojlet7lb on mwl_item (department);
