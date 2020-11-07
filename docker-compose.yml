@@ -2,10 +2,7 @@ version: "3"
 services:
    db:
     image: dcm4che/postgres-dcm4chee:12.2-22
-    environment:
-      POSTGRES_DB: pacsdb
-      POSTGRES_USER: pacs
-      POSTGRES_PASSWORD: pacs
+    env_file: docker-compose.env
     ports:
       - "5432:5432"
     volumes:
