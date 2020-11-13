@@ -16,7 +16,7 @@ create table mpps (pk int8 not null, accession_no varchar(255) not null, created
 create table mwl_item (pk int8 not null, accession_no varchar(255) not null, admission_id varchar(255) not null, created_time timestamp not null, institution varchar(255) not null, department varchar(255) not null, local_aet varchar(255) not null, modality varchar(255) not null, req_proc_id varchar(255) not null, sps_id varchar(255) not null, sps_start_date varchar(255) not null, sps_start_time varchar(255) not null, sps_status int4 not null, study_iuid varchar(255) not null, updated_time timestamp not null, version int8, dicomattrs_fk int8 not null, inst_code_fk int8, dept_code_fk int8, accno_issuer_fk int8, admid_issuer_fk int8, patient_fk int8 not null, perf_phys_name_fk int8, primary key (pk));
 create table patient (pk int8 not null, created_time timestamp not null, failed_verifications int4 not null, num_studies int4 not null, pat_birthdate varchar(255) not null, pat_custom1 varchar(255) not null, pat_custom2 varchar(255) not null, pat_custom3 varchar(255) not null, pat_sex varchar(255) not null, updated_time timestamp not null, verification_status int4 not null, verification_time timestamp, version int8, dicomattrs_fk int8 not null, merge_fk int8, patient_id_fk int8, pat_name_fk int8, resp_person_fk int8, primary key (pk));
 create table patient_id (pk int8 not null, pat_id varchar(255) not null, pat_id_type_code varchar(255), version int8, issuer_fk int8, primary key (pk));
-create table person_name (pk int8 not null, alphabetic_name varchar(255) not null, family_name varchar(255), given_name varchar(255), i_family_name varchar(255), i_given_name varchar(255), i_middle_name varchar(255), ideographic_name varchar(255) not null, i_name_prefix varchar(255), i_name_suffix varchar(255), middle_name varchar(255), name_prefix varchar(255), name_suffix varchar(255), p_family_name varchar(255), p_given_name varchar(255), p_middle_name varchar(255), phonetic_name varchar(255) not null, p_name_prefix varchar(255), p_name_suffix varchar(255), primary key (pk));
+create table person_name (pk int8 not null, alphabetic_name varchar(255) not null, ideographic_name varchar(255) not null, phonetic_name varchar(255) not null, primary key (pk));
 create table queue_msg (pk int8 not null, batch_id varchar(255), created_time timestamp not null, device_name varchar(255) not null, error_msg varchar(255), msg_body bytea not null, msg_id varchar(255) not null, msg_props varchar(4000) not null, num_failures int4 not null, outcome_msg varchar(255), priority int4 not null, proc_end_time timestamp, proc_start_time timestamp, queue_name varchar(255) not null, scheduled_time timestamp not null, msg_status int4 not null, updated_time timestamp not null, version int8, primary key (pk));
 create table rejected_instance (pk int8 not null, created_time timestamp not null, series_iuid varchar(255) not null, sop_cuid varchar(255) not null, sop_iuid varchar(255) not null, study_iuid varchar(255) not null, reject_code_fk int8, primary key (pk));
 create table rel_study_pcode (study_fk int8 not null, pcode_fk int8 not null);
@@ -109,15 +109,6 @@ alter table patient_id add constraint UK_31gvi9falc03xs94m8l3pgoid  unique (pat_
 create index UK_gs2yshbwu0gkd33yxyv13keoh on person_name (alphabetic_name);
 create index UK_ala4l4egord8i2tjvjidoqd1s on person_name (ideographic_name);
 create index UK_9nr8ddkp8enufvbn72esyw3n1 on person_name (phonetic_name);
-create index UK_mgrwrswyrk02s1kn86cvpix3m on person_name (family_name);
-create index UK_byvbmsx5w9jop12gdqldogbwm on person_name (given_name);
-create index UK_hop27c6p2aiabl0ei6rj7oohi on person_name (middle_name);
-create index UK_l3prcvmx90pdclj84s6uvbblm on person_name (i_family_name);
-create index UK_tgh0ek52g7cpioire3qwdweoi on person_name (i_given_name);
-create index UK_lwnfdvx2cknj9ravec592642d on person_name (i_middle_name);
-create index UK_2189yvio0mae92hjhgbfwqgvc on person_name (p_family_name);
-create index UK_6cn50unrp2u9xf6authiollrr on person_name (p_given_name);
-create index UK_kungbb1r2qtt9aq0vsb1l68y6 on person_name (p_middle_name);
 alter table queue_msg add constraint UK_k520j369nwx6rpbkvlp4kn623  unique (msg_id);
 create index UK_kvtxqtdow67hcr2wv8irtdwqy on queue_msg (device_name);
 create index UK_b5mbe6jenklf1r5wp5csrvf67 on queue_msg (queue_name);
