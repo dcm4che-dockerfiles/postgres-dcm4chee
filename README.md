@@ -14,7 +14,7 @@ $ docker run --name postgres \
            -e POSTGRES_USER=pacs\
            -e POSTGRES_PASSWORD=pacs \
            -v /var/local/dcm4chee-arc/db:/var/lib/postgresql/data \
-           -d dcm4che/postgres-dcm4chee:12.2-22
+           -d dcm4che/postgres-dcm4chee:13.1-23
 ````
 
 ## connect to it from the DICOM Archive application
@@ -66,9 +66,9 @@ created to contain the data.
                  -p 5432:5432 \
                  -e POSTGRES_DB=pacsdb \
                  -e POSTGRES_USER=pacs \
-                 -e POSTGRES_PASSWORD=pacsword \
+                 -e POSTGRES_PASSWORD=pacs \
                  -v /path/to/db1:/var/lib/postgresql/data \
-                 -d dcm4che/postgres-dcm4chee:12.2-22
+                 -d dcm4che/postgres-dcm4chee:13.1-23
     ```
 2. Allow all hosts to replicate with this 'master' DB:
 
@@ -76,10 +76,8 @@ created to contain the data.
     $ echo 'host replication replicator 0.0.0.0/0 trust' >> /path/to/db1/pg_hba.conf
     $ cat << EOF >> /path/to/db1/postgresql.conf
     wal_level = hot_standby
-    checkpoint_segments = 8
     max_wal_senders = 3
-    wal_keep_segments = 8
-    hot_standby = on
+    wal_keep_size = 128
     EOF
     ```
 3. Restart the container:
@@ -97,46 +95,32 @@ created to contain the data.
 
     ```
     $ docker run -v /path/to/db2:/var/lib/postgresql/data \
-                 --rm -it dcm4che/postgres-dcm4chee:12.2-22 \
-                 su -c "pg_basebackup -h <ip-of-db1-host> -D /var/lib/postgresql/data -Ureplicator -P -v -x"
+                 --rm -it dcm4che/postgres-dcm4chee:13.1-23 \
+                 su -c "pg_basebackup -h <ip-of-db1-host> -D /var/lib/postgresql/data -Ureplicator -P -v -Xfetch -R"
     ```
-6. Configure parameters needed for log-streaming replication standby in Recovery Configuration file `recovery.conf`:
-
-    ```
-    $ cat << EOF > /path/to/db2/recovery.conf
-    primary_conninfo = 'host=<ip-of-db1-host> port=5432 user=replicator password=replpass'
-    trigger_file = '/var/lib/postgresql/data/failover'
-    standby_mode = 'on'
-    EOF
-    ```
-7. Adjust the permissions of the data directory:
-
-    ```
-    $ chmod 700 /path/to/db2
-    ```
-8. Start another container with Postgres acting as 'slave' DB connected with the 'master' DB:
+6. Start another container with Postgres acting as 'slave' DB connected with the 'master' DB:
 
     ```
     $ docker run --name db2 \
-                 -p 5432:5432 \
+                 -p 6432:5432 \
                  -e POSTGRES_DB=pacsdb \
                  -e POSTGRES_USER=pacs \
-                 -e POSTGRES_PASSWORD=pacsword \
+                 -e POSTGRES_PASSWORD=pacs \
                  -v /path/to/db2:/var/lib/postgresql/data \
-                 -d dcm4che/postgres-dcm4chee:12.2-22
+                 -d dcm4che/postgres-dcm4chee:13.1-23
     ```
 
 ## Initiate failover from 'master' DB to 'slave' DB
 
-1. Create trigger file `failover` in the data directory of the slave DB:
+1. Execute `pg_ctl promote` as user `postgres` in the container acting as 'slave' DB:
 
-    ```
-    $ touch /var/local/mypacs/slave_db/failover
+    ```console
+    $ docker exec db2 runuser -u postgres pg_ctl promote
+    waiting for server to promote.... done
+    server promoted
     ```
 
-  Postgres will remove the trigger file and rename Recovery Configuration file `recovery.conf`
-  to `recovery.done`, indicating that the 'slave' DB is no longer in standby mode, but is acting
-  as new 'master' DB'.
+  to exit standby mode and switch the server to normal operation to act as new 'master' DB'.
   
 ## Recover previous 'master' DB after failover to 'slave' DB
 
@@ -155,30 +139,17 @@ created to contain the data.
 
     ```
     $ docker run -v /path/to/db1:/var/lib/postgresql/data \
-                 --rm -it dcm4che/postgres-dcm4chee:12.2-22 \
-                 su -c "pg_basebackup -h <ip-of-db2-host> -D /var/lib/postgresql/data -Ureplicator -P -v -x"
+                 --rm -it dcm4che/postgres-dcm4chee:13.1-23 \
+                 su -c "pg_basebackup -h <ip-of-db2-host> -D /var/lib/postgresql/data -Ureplicator -P -v -Xfetch -R"
     ```
-4. Configure parameters needed for log-streaming replication standby in Recovery Configuration file `recovery.conf`:
-
-    ```
-    $ cat << EOF > /path/to/db1/recovery.conf
-    primary_conninfo = 'host=<ip-of-db2-host> port=5432 user=replicator password=replpass'
-    trigger_file = '/var/lib/postgresql/data/failover'
-    standby_mode = 'on'
-    EOF
-    ```
-5. Adjust the permissions of the data directory:
-
-    ```
-    $ chmod 700 /path/to/db1
-    ```
-6. Start another container with Postgres acting as new 'slave' DB connected with the new 'master' DB:
+4. Start another container with Postgres acting as new 'slave' DB connected with the new 'master' DB:
 
     ```
     $ docker run --name db1 \
                  -p 5432:5432 \
                  -e POSTGRES_DB=pacsdb \
                  -e POSTGRES_USER=pacs \
-                 -e POSTGRES_PASSWORD=pacsword \
+                 -e POSTGRES_PASSWORD=pacs \
                  -v /path/to/db1:/var/lib/postgresql/data \
-                 -d dcm4che/postgres-dcm4chee:12.2-22
+                 -d dcm4che/postgres-dcm4chee:13.1-23
+   ```
