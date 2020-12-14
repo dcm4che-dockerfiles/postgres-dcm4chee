@@ -17,3 +17,17 @@ create index alphabetic_name_upper_idx on person_name (upper(alphabetic_name));
 
 alter table issuer drop constraint UK_gknfxd1vh283cmbg8ymia9ms8;
 create index UK_gknfxd1vh283cmbg8ymia9ms8 on issuer (entity_id);
+
+alter table series
+    add receiving_aet varchar(255),
+    add receiving_pres_addr varchar(255),
+    add sending_aet varchar(255),
+    add sending_pres_addr varchar(255);
+
+update series
+set sending_aet = src_aet;
+
+create index UK_b9e2bptvail8xnmb62h30h4d2 on series (sending_aet);
+create index UK_lnck3a2qjo1vc430n1sy51vbr on series (receiving_aet);
+create index UK_gxun7s005k8qf7qwhjhkkkkng on series (sending_pres_addr);
+create index UK_e15a6qnq8jcq931agc2v48nvt on series (receiving_pres_addr);
