@@ -20,3 +20,6 @@ alter table person_name
     drop p_middle_name,
     drop p_name_prefix,
     drop p_name_suffix;
+
+alter table series
+    drop src_aet;
