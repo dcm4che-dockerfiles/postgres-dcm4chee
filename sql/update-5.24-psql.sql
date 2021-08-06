@@ -55,7 +55,7 @@ alter table rel_task_dicomattrs add constraint FK_pwaoih2f4ay4c00avvt79de7h fore
 
 alter table stgcmt_result add task_fk int8;
 
-create index UK_ghrndxbss4vxuxmsc3xeu2ol8 on stgcmt_result (task_fk);
+create index UK_j292rvji1d7hintidhgkkcbpw on stgcmt_result (task_fk);
 create index UK_m47ruxpag7pq4gtn12lc63yfe on task (device_name);
 create index UK_r2bcfyreh4n9h392iik1aa6sh on task (queue_name);
 create index UK_a582by7kuyuhk8hi41tkelhrw on task (task_type);
@@ -81,12 +81,12 @@ create sequence task_pk_seq;
 -- part 3: can be applied on already running archive 5.24
 alter table stgcmt_result drop msg_id;
 
+drop table diff_task_attrs;
 drop table diff_task;
 drop table export_task;
 drop table retrieve_task;
 drop table stgver_task;
 drop table queue_msg;
-drop table diff_task_attrs;
 
 drop sequence diff_task_pk_seq;
 drop sequence export_task_pk_seq;
