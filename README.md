@@ -14,7 +14,7 @@ $ docker run --name postgres \
            -e POSTGRES_USER=pacs\
            -e POSTGRES_PASSWORD=pacs \
            -v /var/local/dcm4chee-arc/db:/var/lib/postgresql/data \
-           -d dcm4che/postgres-dcm4chee:14.1-25
+           -d dcm4che/postgres-dcm4chee:14.2-26
 ````
 
 ## connect to it from the DICOM Archive application
@@ -68,7 +68,7 @@ created to contain the data.
                  -e POSTGRES_USER=pacs \
                  -e POSTGRES_PASSWORD=pacs \
                  -v /path/to/db1:/var/lib/postgresql/data \
-                 -d dcm4che/postgres-dcm4chee:14.1-25
+                 -d dcm4che/postgres-dcm4chee:14.2-26
     ```
 2. Allow all hosts to replicate with this 'master' DB:
 
@@ -95,7 +95,7 @@ created to contain the data.
 
     ```
     $ docker run -v /path/to/db2:/var/lib/postgresql/data \
-                 --rm -it dcm4che/postgres-dcm4chee:14.1-25 \
+                 --rm -it dcm4che/postgres-dcm4chee:14.2-26 \
                  su -c "pg_basebackup -h <ip-of-db1-host> -D /var/lib/postgresql/data -Ureplicator -P -v -Xfetch -R"
     ```
 6. Start another container with Postgres acting as 'slave' DB connected with the 'master' DB:
@@ -107,7 +107,7 @@ created to contain the data.
                  -e POSTGRES_USER=pacs \
                  -e POSTGRES_PASSWORD=pacs \
                  -v /path/to/db2:/var/lib/postgresql/data \
-                 -d dcm4che/postgres-dcm4chee:14.1-25
+                 -d dcm4che/postgres-dcm4chee:14.2-26
     ```
 
 ## Initiate failover from 'master' DB to 'slave' DB
@@ -139,7 +139,7 @@ created to contain the data.
 
     ```
     $ docker run -v /path/to/db1:/var/lib/postgresql/data \
-                 --rm -it dcm4che/postgres-dcm4chee:14.1-25 \
+                 --rm -it dcm4che/postgres-dcm4chee:14.2-26 \
                  su -c "pg_basebackup -h <ip-of-db2-host> -D /var/lib/postgresql/data -Ureplicator -P -v -Xfetch -R"
     ```
 4. Start another container with Postgres acting as new 'slave' DB connected with the new 'master' DB:
@@ -151,5 +151,5 @@ created to contain the data.
                  -e POSTGRES_USER=pacs \
                  -e POSTGRES_PASSWORD=pacs \
                  -v /path/to/db1:/var/lib/postgresql/data \
-                 -d dcm4che/postgres-dcm4chee:14.1-25
+                 -d dcm4che/postgres-dcm4chee:14.2-26
    ```
