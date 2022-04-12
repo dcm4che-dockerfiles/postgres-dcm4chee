@@ -1,4 +1,4 @@
--- part 3: can be applied on already running archive 5.25
+-- part 3: can be applied on already running archive 5.26
 alter table mpps
     drop accno_issuer_fk;
 
