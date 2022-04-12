@@ -1,4 +1,4 @@
--- part 2: shall be applied on stopped archive before starting 5.25
+-- part 2: shall be applied on stopped archive before starting 5.26
 update mpps
 set (accno_entity_id, accno_entity_uid, accno_entity_uid_type) =
         (select issuer.entity_id, issuer.entity_uid, issuer.entity_uid_type
