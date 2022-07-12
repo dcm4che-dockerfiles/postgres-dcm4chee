@@ -1,4 +1,4 @@
-FROM postgres:13.6
+FROM postgres:13.7
 
 COPY docker-entrypoint-initdb.d docker-entrypoint-initdb.d/
 COPY sql sql/
