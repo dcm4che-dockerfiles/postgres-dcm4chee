@@ -1,4 +1,4 @@
-FROM postgres:11.19-bullseye
+FROM postgres:11.20-bullseye
 COPY docker-entrypoint-initdb.d docker-entrypoint-initdb.d/
 COPY sql sql/
 COPY bin /usr/bin/
