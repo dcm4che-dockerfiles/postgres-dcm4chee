@@ -1,4 +1,4 @@
--- can be applied on archive running archive 5.25
+-- part 1: can be applied on archive running archive 5.25
 alter table series
     add receiving_hl7_app varchar(255),
     add receiving_hl7_facility varchar(255),
@@ -65,11 +65,68 @@ alter table rel_ups_station_name_code
 alter table rel_ups_station_name_code
     add constraint FK_8jf5xe8ot2yammv3ksd5xrgif foreign key (ups_fk) references ups;
 
+alter table hl7psu_task
+    add pps_status int4;
+
+alter table hl7psu_task
+    drop constraint UK_p5fraoqdbaywmlyumaeo16t56;
+
+alter table hl7psu_task
+    add constraint UK_1t3jge4o2fl1byp3y8ljmkb3m  unique (study_iuid, pps_status);
+
 update patient_id
 set (entity_id, entity_uid, entity_uid_type) =
         (select issuer.entity_id, issuer.entity_uid, issuer.entity_uid_type
          from issuer where issuer_fk = issuer.pk)
 where issuer_fk is not null;
+
+update mpps
+set (accno_entity_id, accno_entity_uid, accno_entity_uid_type) =
+        (select issuer.entity_id, issuer.entity_uid, issuer.entity_uid_type
+         from issuer where accno_issuer_fk = issuer.pk)
+where accno_issuer_fk is not null;
+
+update mwl_item
+set (accno_entity_id, accno_entity_uid, accno_entity_uid_type) =
+        (select issuer.entity_id, issuer.entity_uid, issuer.entity_uid_type
+         from issuer where accno_issuer_fk = issuer.pk)
+where accno_issuer_fk is not null;
+
+update mwl_item
+set (admid_entity_id, admid_entity_uid, admid_entity_uid_type) =
+        (select issuer.entity_id, issuer.entity_uid, issuer.entity_uid_type
+         from issuer where admid_issuer_fk = issuer.pk)
+where admid_issuer_fk is not null;
+
+update series_req
+set (accno_entity_id, accno_entity_uid, accno_entity_uid_type) =
+        (select issuer.entity_id, issuer.entity_uid, issuer.entity_uid_type
+         from issuer where accno_issuer_fk = issuer.pk)
+where accno_issuer_fk is not null;
+
+update study
+set (accno_entity_id, accno_entity_uid, accno_entity_uid_type) =
+        (select issuer.entity_id, issuer.entity_uid, issuer.entity_uid_type
+         from issuer where accno_issuer_fk = issuer.pk)
+where accno_issuer_fk is not null;
+
+update study
+set (admid_entity_id, admid_entity_uid, admid_entity_uid_type) =
+        (select issuer.entity_id, issuer.entity_uid, issuer.entity_uid_type
+         from issuer where admid_issuer_fk = issuer.pk)
+where admid_issuer_fk is not null;
+
+update ups
+set (admid_entity_id, admid_entity_uid, admid_entity_uid_type) =
+        (select issuer.entity_id, issuer.entity_uid, issuer.entity_uid_type
+         from issuer where ups.admission_issuer_fk = issuer.pk)
+where admission_issuer_fk is not null;
+
+update ups_req
+set (accno_entity_id, accno_entity_uid, accno_entity_uid_type) =
+        (select issuer.entity_id, issuer.entity_uid, issuer.entity_uid_type
+         from issuer where accno_issuer_fk = issuer.pk)
+where accno_issuer_fk is not null;
 
 create index UK_ffpftwfkijejj09tlbxr7u5g8 on series (sending_hl7_app);
 create index UK_1e4aqxc5w1557hr3fb3lqm2qb on series (sending_hl7_facility);
