@@ -1,14 +1,23 @@
 version: "3"
 services:
-   db:
-    image: dcm4che/postgres-dcm4chee:16.4-33
+  cli:
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
-      POSTGRES_DB: pacsdb
-      POSTGRES_USER: pacs
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: pacs
+      PGPASSWORD: pacs
+      PGDATABASE: pacsdb
+    entrypoint: create-tables
+    depends_on:
+      - db
+
+  #POstgres
+  db:
+    image: postgres:16.4-alpine
+    environment:
       POSTGRES_PASSWORD: pacs
-    ports:
-      - "5432:5432"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - /var/local/dcm4chee-arc/db:/var/lib/postgresql/data
+      POSTGRES_USER: pacs
+      POSTGRES_DB: pacsdb
