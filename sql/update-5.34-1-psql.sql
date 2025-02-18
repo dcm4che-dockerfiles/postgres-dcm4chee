@@ -6,5 +6,5 @@ update patient_id set entity_id = entity_uid
     where entity_id is null and entity_uid is not null;
 update patient_id set entity_uid = concat('iss:', entity_id), entity_uid_type = 'URI'
     where entity_uid is null and entity_id is not null;
-update patient_id set entity_id = 'unknown', entity_uid = 'iss:unknown', entity_uid_type = 'URI'
+update patient_id set entity_id = '*', entity_uid = 'iss:*', entity_uid_type = 'URI'
     where entity_id is null;
