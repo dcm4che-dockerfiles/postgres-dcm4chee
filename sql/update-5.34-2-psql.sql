@@ -12,3 +12,8 @@ update patient_id set pat_name = '*'
     where pat_name is null;
 alter table patient_id add constraint patient_id_pat_id_pat_name_key
     unique (pat_id, pat_name);
+
+update series set metadata_update_load_objects = true
+    where metadata_update_time is not null and metadata_update_load_objects is null;
+update series set metadata_update_load_objects = false
+    where metadata_update_time is null and metadata_update_load_objects is null;
