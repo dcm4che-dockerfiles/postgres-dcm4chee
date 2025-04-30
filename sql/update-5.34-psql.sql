@@ -15,6 +15,12 @@ update patient_id set pat_name = (
 update patient_id set pat_name = '*'
     where pat_name is null;
 
+alter table series add metadata_update_load_objects boolean;
+update series set metadata_update_load_objects = true
+    where metadata_update_time is not null;
+update series set metadata_update_load_objects = false
+    where metadata_update_time is null;
+
 -- part 2: shall be applied on stopped archive before starting 5.34
 update patient_id set pat_name = (
     select rtrim(concat(
@@ -30,6 +36,14 @@ update patient_id set pat_name = '*'
 alter table patient_id add constraint patient_id_pat_id_pat_name_key
     unique (pat_id, pat_name);
 
+update series set metadata_update_load_objects = true
+    where metadata_update_time is not null and metadata_update_load_objects is null;
+update series set metadata_update_load_objects = false
+    where metadata_update_time is null and metadata_update_load_objects is null;
+
 -- part 3: can be applied on already running archive 5.34
 alter table patient_id
     alter pat_name set not null;
+
+alter table series
+    alter metadata_update_load_objects set not null;
