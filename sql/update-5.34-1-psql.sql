@@ -14,3 +14,9 @@ update patient_id set pat_name = (
         where patient.pk = patient_id.patient_fk );
 update patient_id set pat_name = '*'
     where pat_name is null;
+
+alter table series add metadata_update_load_objects boolean;
+update series set metadata_update_load_objects = true
+    where metadata_update_time is not null;
+update series set metadata_update_load_objects = false
+    where metadata_update_time is null;
