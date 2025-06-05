@@ -20,3 +20,4 @@ update series set metadata_update_load_objects = true
     where metadata_update_time is not null;
 update series set metadata_update_load_objects = false
     where metadata_update_time is null;
+create index IDX12auabn3ubq8bat0wkg33n3ms on series (created_time);
