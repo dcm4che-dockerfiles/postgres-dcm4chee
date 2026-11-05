@@ -11,4 +11,4 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - /var/local/dcm4chee-arc/db:/var/lib/postgresql/data
+      - /var/local/dcm4chee-arc/psql-18:/var/lib/postgresql/18/docker
