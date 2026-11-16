@@ -1,11 +1,9 @@
 -- part 1: can be applied on archive running archive 5.35
 alter table ups
-    add institution varchar(255),
-    add department varchar(255),
+    add institution varchar(255) not null default '*',
+    add department varchar(255) not null default '*',
     add inst_code_fk bigint,
     add dept_code_fk bigint;
-
-update ups set institution='*', department='*';
 
 create index IDXi74frwq9xkdswyg0cbw0vd3hy on ups (institution);
 create index IDXrirxs9tt1bpxqe9o5v27jb64i on ups (department);
@@ -21,15 +19,16 @@ alter table patient_id
 
 update patient_id set created_time=(
     select patient.created_time
-        from patient
-        where patient.pk = patient_id.patient_fk);
+    from patient
+    where patient.pk = patient_id.patient_fk);
 
 update patient_id set updated_time = created_time;
 
 alter table metadata
-    add num_instances integer;
+    add num_instances integer not null default 0;
 
-update metadata set num_instances=(
+update metadata set num_instances = (
     select count(instance.pk)
-        from instance join series on series_fk=series.pk
-        where series.metadata_fk = metadata.pk);
+    from instance join series on series_fk=series.pk
+    where series.metadata_fk = metadata.pk)
+where pk in (select series.metadata_fk from series where inst_purge_state <> 1);
